@@ -1,4 +1,6 @@
-﻿export function TaskForm() {
+// Dibuja el formulario de alta. En esta versión el botón está deshabilitado
+// y todavía no existe una acción que agregue tareas.
+export function TaskForm() {
   return (
     <section
       className="panel"

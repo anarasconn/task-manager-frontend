@@ -1,9 +1,11 @@
-﻿interface TaskSummaryProps {
+// Define los conteos que el componente padre debe proporcionar.
+interface TaskSummaryProps {
   total: number;
   pending: number;
   completed: number;
 }
 
+// Presenta los totales recibidos; no calcula las cantidades por sí mismo.
 export function TaskSummary({
   total,
   pending,

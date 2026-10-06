@@ -1,10 +1,13 @@
-﻿type TaskStatus = 'pending' | 'completed';
+// Solo se permiten estos dos estados para una tarea.
+type TaskStatus = 'pending' | 'completed';
 
+// Datos que el componente necesita para mostrar una tarea.
 interface TaskItemProps {
   title: string;
   status: TaskStatus;
 }
 
+// Presenta el título, el estado y los controles deshabilitados de una tarea.
 export function TaskItem({ title, status }: TaskItemProps) {
   const statusLabel =
     status === 'completed' ? 'Completada' : 'Pendiente';

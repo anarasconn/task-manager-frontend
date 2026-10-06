@@ -1,4 +1,5 @@
-﻿export function AppHeader() {
+// Presenta el título del administrador y el texto introductorio.
+export function AppHeader() {
   return (
     <header className="app-header">
       <div className="app-header__content">

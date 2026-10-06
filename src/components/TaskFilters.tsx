@@ -1,4 +1,5 @@
-﻿export function TaskFilters() {
+// Muestra controles de búsqueda, estado y orden que aún son solo visuales.
+export function TaskFilters() {
   return (
     <section className="panel" aria-labelledby="filters-title">
       <div className="section-heading">

@@ -1,5 +1,6 @@
 ﻿import { TaskItem } from './TaskItem';
 
+// Muestra tareas de ejemplo fijas, representando cada una con TaskItem.
 export function TaskList() {
   return (
     <section className="panel" aria-labelledby="task-list-title">

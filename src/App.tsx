@@ -5,6 +5,7 @@ import { TaskForm } from './components/TaskForm';
 import { TaskList } from './components/TaskList';
 import { TaskSummary } from './components/TaskSummary';
 
+// Ensambla las secciones visibles de la página principal.
 export default function App() {
   return (
     <div className="app-shell">
@@ -13,6 +14,7 @@ export default function App() {
       <main className="app-main">
         <TaskForm />
         <TaskFilters />
+        {/* Estos números coinciden con las tres tareas de demostración de TaskList. */}
         <TaskSummary total={3} pending={2} completed={1} />
         <TaskList />
       </main>
