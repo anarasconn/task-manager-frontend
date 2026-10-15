@@ -1,0 +1,49 @@
+# Preguntas de cierre - EC2 F1 A6
+
+## 1. ¿Qué función cumple la interfaz Task?
+
+Define cómo debe ser una tarea: qué propiedades tiene (id, title, status, createdAt y updatedAt) y de qué tipo es cada una. Si a un objeto le falta una propiedad o tiene un tipo incorrecto, TypeScript avisa del error.
+
+## 2. ¿Qué diferencia existe entre Task y TaskStatus?
+
+Task describe el objeto completo de una tarea. TaskStatus es un tipo que solo limita el campo status a dos valores posibles: 'pending' o 'completed'.
+
+## 3. ¿Qué significa declarar un arreglo como Task[]?
+
+Significa que es un arreglo donde todos los elementos deben cumplir con la interfaz Task. Si algún objeto no la cumple, TypeScript muestra un error.
+
+## 4. ¿Qué hace el método map?
+
+Recorre un arreglo elemento por elemento y devuelve un arreglo nuevo con un resultado por cada elemento, sin modificar el original.
+
+## 5. ¿Qué resultado produce map dentro de TaskList?
+
+Produce un componente TaskItem por cada tarea del arreglo, y React los muestra en pantalla como la lista de tareas.
+
+## 6. ¿Para qué utiliza React la propiedad key?
+
+Para identificar cada elemento de la lista y relacionarlo con su dato correspondiente. Así, cuando la lista cambia, React sabe qué elementos agregar, quitar o actualizar.
+
+## 7. ¿Por qué se utiliza task.id y no el índice?
+
+Porque el id es único y no cambia, es parte de la tarea. El índice cambia si se reordenan o eliminan tareas, y eso puede causar errores al actualizar la lista.
+
+## 8. ¿Cómo se envía una tarea de TaskList a TaskItem?
+
+Mediante una prop llamada task: `<TaskItem task={task} />`. Se envía el objeto completo y TaskItem lo recibe y usa sus datos.
+
+## 9. ¿Cómo se comunican App, TaskSummary y TaskList?
+
+App importa el arreglo de tareas y se lo envía por props a TaskSummary y a TaskList. Los datos van del componente padre a los hijos (flujo unidireccional) y los hijos solo los reciben y los muestran.
+
+## 10. ¿Qué es el renderizado condicional?
+
+Es mostrar contenido distinto según una condición. En este proyecto, si tasks.length es 0 se muestra el mensaje "No hay tareas registradas", y si hay tareas se muestra la lista.
+
+## 11. ¿Por qué el resumen se calcula a partir de la colección?
+
+Porque así los números siempre coinciden con los datos reales. Si cambia el arreglo, el resumen se actualiza solo y no hay que modificar valores a mano ni se pueden desincronizar.
+
+## 12. ¿Qué dificultad encontraste durante la refactorización y cómo la resolviste?
+
+Al crear las carpetas con `mkdir src/models src/data`, PowerShell marcó un error porque solo acepta una ruta por comando. Lo resolví escribiendo `mkdir src/models, src/data` (separadas por coma) o ejecutando un comando por cada carpeta.
