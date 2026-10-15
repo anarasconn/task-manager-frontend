@@ -6,6 +6,7 @@ import { TaskList } from './components/TaskList';
 import { TaskSummary } from './components/TaskSummary';
 import { tasks as initialTasks } from './data/tasks';
 import type { Task } from './models/task.interface';
+import { TaskActions } from './components/TaskActions';
 
 export default function App() {
   const [tasks, setTasks] = useState<Task[]>(
@@ -76,7 +77,27 @@ export default function App() {
       currentTasks.filter((task) => task.id !== id),
     );
   }
+const completedCount = tasks.filter(
+  (task) => task.status === 'completed',
+).length;
 
+function handleClearCompleted() {
+  if (completedCount === 0) {
+    return;
+  }
+
+  const shouldDelete = window.confirm(
+    `¿Eliminar ${completedCount} tarea(s) completada(s)?`,
+  );
+
+  if (!shouldDelete) {
+    return;
+  }
+
+  setTasks((currentTasks) =>
+    currentTasks.filter((task) => task.status !== 'completed'),
+  );
+}
   return (
     <div className="app-shell">
       <AppHeader />
@@ -85,6 +106,19 @@ export default function App() {
         <TaskForm onAddTask={handleAddTask} />
         <TaskFilters />
         <TaskSummary tasks={tasks} />
+        <TaskSummary tasks={tasks} />
+
+<TaskActions
+  completedCount={completedCount}
+  onClearCompleted={handleClearCompleted}
+/>
+
+<TaskList
+  tasks={tasks}
+  onToggleStatus={handleToggleStatus}
+  onEditTask={handleEditTask}
+  onDeleteTask={handleDeleteTask}
+/>
         <TaskList
           tasks={tasks}
           onToggleStatus={handleToggleStatus}
