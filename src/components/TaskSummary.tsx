@@ -1,26 +1,28 @@
-// Define los conteos que el componente padre debe proporcionar.
+import type { Task } from '../models/task.interface';
+
 interface TaskSummaryProps {
-  total: number;
-  pending: number;
-  completed: number;
+  tasks: Task[];
 }
 
-// Presenta los totales recibidos; no calcula las cantidades por sí mismo.
-export function TaskSummary({
-  total,
-  pending,
-  completed,
-}: TaskSummaryProps) {
+export function TaskSummary({ tasks }: TaskSummaryProps) {
+  const completed = tasks.filter(
+    ({ status }) => status === 'completed',
+  ).length;
+
+  const pending = tasks.length - completed;
+
   return (
     <section className="summary-grid" aria-label="Resumen de tareas">
       <article className="summary-card">
         <span>Total</span>
-        <strong>{total}</strong>
+        <strong>{tasks.length}</strong>
       </article>
+
       <article className="summary-card">
         <span>Pendientes</span>
         <strong>{pending}</strong>
       </article>
+
       <article className="summary-card">
         <span>Completadas</span>
         <strong>{completed}</strong>

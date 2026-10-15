@@ -46,4 +46,4 @@ TaskItem, porque con la misma estructura muestra tareas distintas solo cambiando
 
 ## 12. ¿Qué dificultad encontraste y cómo la resolviste?
 
-Al principio la aplicación mostró un error porque App.tsx importaba componentes cuyos archivos aún no existían (AppHeader y AppFooter). Lo resolví revisando con Get-ChildItem qué archivos faltaban y creándolos en src/components. También tuve que corregir la URL del repositorio remoto con git remote set-url.
+Al principio la aplicación mostró un error porque App.tsx importaba archivos aún no existían (AppHeader y AppFooter). Lo resolví revisando con Get-ChildItem qué archivos faltaban y creándolos en src/components.
