@@ -1,4 +1,4 @@
-﻿import { useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { AppHeader } from './components/AppHeader';
 import { TaskFilters } from './components/TaskFilters';
 import { TaskForm } from './components/TaskForm';
@@ -6,13 +6,43 @@ import { TaskList } from './components/TaskList';
 import { TaskSummary } from './components/TaskSummary';
 import { tasks as initialTasks } from './data/tasks';
 import type { Task } from './models/task.interface';
-import { TaskActions } from './components/TaskActions';
+import type {
+  TaskFilter,
+  TaskSort,
+} from './models/task-view.types';
+import { getVisibleTasks } from './services/task-query.service';
+import {
+  loadTasks,
+  saveTasks,
+} from './services/task-storage.service';
 
 export default function App() {
-  const [tasks, setTasks] = useState<Task[]>(
-    () => [...initialTasks],
+  const [tasks, setTasks] = useState<Task[]>(() =>
+    loadTasks(initialTasks),
   );
-  function handleAddTask(title: string) {
+  const [query, setQuery] = useState('');
+  const [filter, setFilter] = useState<TaskFilter>('all');
+  const [sortBy, setSortBy] =
+    useState<TaskSort>('updated-desc');
+
+  useEffect(() => {
+    saveTasks(tasks);
+  }, [tasks]);
+
+  const visibleTasks = getVisibleTasks(tasks, {
+    query,
+    filter,
+    sortBy,
+  });
+
+  const hasActiveCriteria =
+    query.trim() !== '' || filter !== 'all';
+
+  const emptyMessage = hasActiveCriteria
+    ? 'No hay tareas que coincidan con la búsqueda y el filtro.'
+    : 'Utiliza el formulario para registrar una nueva actividad.';
+
+  function handleAddTask(title: string): void {
     const now = new Date().toISOString();
 
     const newTask: Task = {
@@ -23,10 +53,15 @@ export default function App() {
       updatedAt: now,
     };
 
-    setTasks((currentTasks) => [newTask, ...currentTasks]);
+    setTasks((currentTasks) => [
+      newTask,
+      ...currentTasks,
+    ]);
   }
-  function handleToggleStatus(id: string) {
+
+  function handleToggleStatus(id: string): void {
     const now = new Date().toISOString();
+
     setTasks((currentTasks) =>
       currentTasks.map((task) => {
         if (task.id !== id) {
@@ -36,25 +71,38 @@ export default function App() {
         return {
           ...task,
           status:
-            task.status === 'pending' ? 'completed' : 'pending',
+            task.status === 'pending'
+              ? 'completed'
+              : 'pending',
           updatedAt: now,
         };
       }),
     );
   }
-  function handleEditTask(id: string, title: string) {
+
+  function handleEditTask(
+    id: string,
+    title: string,
+  ): void {
     const now = new Date().toISOString();
 
     setTasks((currentTasks) =>
       currentTasks.map((task) =>
         task.id === id
-          ? { ...task, title, updatedAt: now }
+          ? {
+              ...task,
+              title,
+              updatedAt: now,
+            }
           : task,
       ),
     );
   }
-  function handleDeleteTask(id: string) {
-    const selectedTask = tasks.find((task) => task.id === id);
+
+  function handleDeleteTask(id: string): void {
+    const selectedTask = tasks.find(
+      (task) => task.id === id,
+    );
 
     if (!selectedTask) {
       return;
@@ -72,41 +120,36 @@ export default function App() {
       currentTasks.filter((task) => task.id !== id),
     );
   }
-const completedCount = tasks.filter(
-  (task) => task.status === 'completed',
-).length;
-function handleClearCompleted() {
-  if (completedCount === 0) {
-    return;
+
+  function handleClearCriteria(): void {
+    setQuery('');
+    setFilter('all');
+    setSortBy('updated-desc');
   }
 
-  const shouldDelete = window.confirm(
-    `¿Eliminar ${completedCount} tarea(s) completada(s)?`,
-  );
-
-  if (!shouldDelete) {
-    return;
-  }
-
-  setTasks((currentTasks) =>
-    currentTasks.filter((task) => task.status !== 'completed'),
-  );
-}
   return (
     <div className="app-shell">
       <AppHeader />
 
       <main className="app-main">
         <TaskForm onAddTask={handleAddTask} />
-        <TaskFilters />
+
+        <TaskFilters
+          query={query}
+          filter={filter}
+          sortBy={sortBy}
+          resultCount={visibleTasks.length}
+          onQueryChange={setQuery}
+          onFilterChange={setFilter}
+          onSortChange={setSortBy}
+          onClear={handleClearCriteria}
+        />
+
         <TaskSummary tasks={tasks} />
 
-<TaskActions
-  completedCount={completedCount}
-  onClearCompleted={handleClearCompleted}
-/>
         <TaskList
-          tasks={tasks}
+          tasks={visibleTasks}
+          emptyMessage={emptyMessage}
           onToggleStatus={handleToggleStatus}
           onEditTask={handleEditTask}
           onDeleteTask={handleDeleteTask}
