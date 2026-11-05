@@ -12,7 +12,6 @@ export default function App() {
   const [tasks, setTasks] = useState<Task[]>(
     () => [...initialTasks],
   );
-
   function handleAddTask(title: string) {
     const now = new Date().toISOString();
 
@@ -26,10 +25,8 @@ export default function App() {
 
     setTasks((currentTasks) => [newTask, ...currentTasks]);
   }
-
   function handleToggleStatus(id: string) {
     const now = new Date().toISOString();
-
     setTasks((currentTasks) =>
       currentTasks.map((task) => {
         if (task.id !== id) {
@@ -45,7 +42,6 @@ export default function App() {
       }),
     );
   }
-
   function handleEditTask(id: string, title: string) {
     const now = new Date().toISOString();
 
@@ -57,7 +53,6 @@ export default function App() {
       ),
     );
   }
-
   function handleDeleteTask(id: string) {
     const selectedTask = tasks.find((task) => task.id === id);
 
@@ -80,7 +75,6 @@ export default function App() {
 const completedCount = tasks.filter(
   (task) => task.status === 'completed',
 ).length;
-
 function handleClearCompleted() {
   if (completedCount === 0) {
     return;
@@ -106,18 +100,10 @@ function handleClearCompleted() {
         <TaskForm onAddTask={handleAddTask} />
         <TaskFilters />
         <TaskSummary tasks={tasks} />
-        <TaskSummary tasks={tasks} />
 
 <TaskActions
   completedCount={completedCount}
   onClearCompleted={handleClearCompleted}
-/>
-
-<TaskList
-  tasks={tasks}
-  onToggleStatus={handleToggleStatus}
-  onEditTask={handleEditTask}
-  onDeleteTask={handleDeleteTask}
 />
         <TaskList
           tasks={tasks}
