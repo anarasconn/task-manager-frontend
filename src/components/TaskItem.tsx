@@ -1,22 +1,18 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
+import { Link } from 'react-router';
 import type { Task } from '../models/task.interface';
 import {
   TASK_TITLE_MAX_LENGTH,
   validateTaskTitle,
 } from '../utils/task-validation';
+import { formatTaskDate } from '../utils/date';
 
 interface TaskItemProps {
   task: Task;
   onToggleStatus: (id: string) => void;
   onEditTask: (id: string, title: string) => void;
-  onDeleteTask: (id: string) => void;
-}
-
-function formatTaskDate(value: string): string {
-  return new Intl.DateTimeFormat('es-MX', {
-    dateStyle: 'medium',
-  }).format(new Date(value));
+  onDeleteTask: (id: string) => boolean;
 }
 
 export function TaskItem({
@@ -26,6 +22,7 @@ export function TaskItem({
   onDeleteTask,
 }: TaskItemProps) {
   const { id, title, status, updatedAt } = task;
+
   const [isEditing, setIsEditing] = useState(false);
   const [draftTitle, setDraftTitle] = useState(title);
   const [error, setError] = useState('');
@@ -58,8 +55,7 @@ export function TaskItem({
   ): void {
     event.preventDefault();
 
-    const validationMessage =
-      validateTaskTitle(draftTitle);
+    const validationMessage = validateTaskTitle(draftTitle);
 
     if (validationMessage) {
       setError(validationMessage);
@@ -67,6 +63,7 @@ export function TaskItem({
     }
 
     onEditTask(id, draftTitle.trim());
+
     setError('');
     setIsEditing(false);
   }
@@ -89,6 +86,7 @@ export function TaskItem({
             >
               Editar título de la tarea
             </label>
+
             <input
               id={`edit-task-${id}`}
               className="task-item__edit-input"
@@ -116,6 +114,7 @@ export function TaskItem({
 
             <div className="task-item__edit-actions">
               <button type="submit">Guardar</button>
+
               <button
                 type="button"
                 onClick={handleCancelEdit}
@@ -127,11 +126,13 @@ export function TaskItem({
         ) : (
           <>
             <h3 className="task-item__title">{title}</h3>
+
             <span
               className={`status-badge status-badge--${status}`}
             >
               {statusLabel}
             </span>
+
             <p className="task-item__date">
               Actualizada:{' '}
               <time dateTime={updatedAt}>
@@ -147,6 +148,15 @@ export function TaskItem({
         role="group"
         aria-label={`Acciones para ${title}`}
       >
+        {!isEditing && (
+          <Link
+            className="button-link button-link--secondary"
+            to={`/tasks/${id}`}
+          >
+            Ver detalle
+          </Link>
+        )}
+
         <button
           type="button"
           onClick={() => onToggleStatus(id)}
@@ -154,6 +164,7 @@ export function TaskItem({
         >
           {status === 'completed' ? 'Reabrir' : 'Completar'}
         </button>
+
         <button
           type="button"
           onClick={handleStartEdit}
@@ -161,10 +172,13 @@ export function TaskItem({
         >
           Editar
         </button>
+
         <button
           type="button"
           className="button-danger"
-          onClick={() => onDeleteTask(id)}
+          onClick={() => {
+            onDeleteTask(id);
+          }}
           disabled={isEditing}
         >
           Eliminar

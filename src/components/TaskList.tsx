@@ -6,7 +6,7 @@ interface TaskListProps {
   emptyMessage: string;
   onToggleStatus: (id: string) => void;
   onEditTask: (id: string, title: string) => void;
-  onDeleteTask: (id: string) => void;
+  onDeleteTask: (id: string) => boolean;
 }
 
 export function TaskList({
@@ -17,9 +17,7 @@ export function TaskList({
   onDeleteTask,
 }: TaskListProps) {
   const resultLabel =
-    tasks.length === 1
-      ? '1 tarea'
-      : `${tasks.length} tareas`;
+    tasks.length === 1 ? '1 tarea' : `${tasks.length} tareas`;
 
   return (
     <section
@@ -31,13 +29,11 @@ export function TaskList({
           <p className="section-heading__eyebrow">
             Actividades
           </p>
-          <h2 id="task-list-title">
-            Tareas registradas
-          </h2>
+
+          <h2 id="task-list-title">Tareas registradas</h2>
         </div>
-        <span className="result-count">
-          {resultLabel}
-        </span>
+
+        <span className="result-count">{resultLabel}</span>
       </div>
 
       {tasks.length === 0 ? (

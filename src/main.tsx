@@ -1,18 +1,19 @@
 ﻿import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { BrowserRouter } from 'react-router';
 import App from './App';
 import './styles/index.css';
 
-// Busca en index.html el elemento donde React dibujará toda la aplicación.
-const rootElement = document.getElementById('root');
+const root = document.getElementById('root');
 
-if (!rootElement) {
+if (!root) {
   throw new Error('No se encontró el elemento #root.');
 }
 
-// Renderiza la aplicación; StrictMode ayuda a detectar problemas durante el desarrollo.
-createRoot(rootElement).render(
+createRoot(root).render(
   <StrictMode>
-    <App />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </StrictMode>,
 );
