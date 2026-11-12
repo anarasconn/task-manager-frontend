@@ -1,16 +1,26 @@
 ﻿# Administrador de tareas Frontend
 
-Aplicación desarrollada con React, TypeScript, Vite y PNPM.
+Aplicación desarrollada con React, TypeScript, Vite, React Router y PNPM.
 
 ## Funciones actuales
 
-- Operaciones CRUD de tareas.
-- Validación al registrar y editar.
-- Búsqueda por título.
-- Filtro por estado.
-- Ordenamiento de resultados.
+- Navegación SPA.
+- Página de inicio.
+- Administración de tareas.
+- Detalle mediante una ruta dinámica.
+- Página 404.
+- Operaciones CRUD.
+- Validación de títulos.
+- Búsqueda, filtros y ordenamiento.
 - Persistencia mediante localStorage.
 - Interfaz adaptable.
+
+## Rutas
+
+- `/`
+- `/tasks`
+- `/tasks/:taskId`
+- `*`
 
 ## Ejecución
 
@@ -28,3 +38,5 @@ pnpm build
 
 ## Alcance
 
+Esta versión utiliza almacenamiento local.
+La API REST se integrará en la Actividad 10.

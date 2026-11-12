@@ -519,7 +519,9 @@ input[aria-invalid='true'] {
 @media (max-width: 760px) {
   .filters-grid {
     grid-template-columns: 1fr;
-      .app-navigation__list {
+  }
+
+  .app-navigation__list {
     flex-direction: column;
     align-items: stretch;
   }
@@ -540,7 +542,6 @@ input[aria-invalid='true'] {
   .task-detail__actions .button-link,
   .task-detail__actions button {
     width: 100%;
-  }
   }
 }
 .sr-only {
