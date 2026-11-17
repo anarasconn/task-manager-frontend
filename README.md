@@ -1,49 +1,41 @@
 ﻿# Administrador de tareas Frontend
 
-SPA desarrollada con React, TypeScript, Vite, React Router y Fetch API.
+SPA con React TypeScript Vite y React Router.
+Consume una API REST protegida mediante JWT Bearer.
 
-## Funciones actuales
+## Funciones
 
-- Registro e inicio de sesión.
-- Restauración de identidad con `/api/auth/me`.
+- Registro login restauración y logout.
 - Rutas públicas y protegidas.
-- CRUD remoto de tareas.
-- Búsqueda, filtros, ordenamiento y paginación.
-- Eliminación disponible para rol `admin`.
-- Manejo de carga, vacío, error, 401 y 403.
-- Cierre de sesión y control de accesos no autorizados.
+- CRUD remoto.
+- Búsqueda filtros orden y paginación.
+- Detalle por identificador.
+- Permisos user y admin.
+- Pruebas y despliegue estático.
 
-## Rutas
-
-- `/`
-- `/login` (pública exclusiva)
-- `/register` (pública exclusiva)
-- `/tasks` (protegida)
-- `/tasks/:taskId` (protegida)
-- `*` (página no encontrada)
-
-## Variables
-
-```env
-VITE_API_URL=/api
-```
-
-## Ejecución
+## Instalación
 
 ```bash
-pnpm install
-pnpm dev
+pnpm install --frozen-lockfile
 ```
 
-La API debe ejecutarse en el puerto configurado por el proxy de Vite (`http://localhost:3000`).
+## Desarrollo
 
-## Seguridad didáctica
+1. Copiar `.env.example` como `.env.local`.
+2. Confirmar `VITE_API_URL=/api`.
+3. Iniciar Backend en `localhost:3000`.
+4. Ejecutar `pnpm dev`.
 
-El `accessToken` se conserva en `sessionStorage` para practicar restauración dentro de la pestaña. No se almacenan contraseñas ni se imprimen tokens en consola. La API en el Backend mantiene la autenticación y autorización reales.
-
-## Validación
+## Verificación
 
 ```bash
-pnpm lint
-pnpm build
+pnpm verify
 ```
+
+## Producción
+
+- Frontend: https://task-manager-frontend-anarascon.onrender.com
+- API: https://task-api-express-anarascon.onrender.com/api
+- Versión: 1.0.0
+
+Consulta `docs/deployment-configuration.md` y `docs/release-checklist.md`.

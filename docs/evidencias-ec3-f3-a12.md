@@ -3,7 +3,7 @@
 ## Identificación
 
 - Repositorio: https://github.com/anarasconn/task-manager-frontend
-- Commit: Pendiente de hash final al etiquetar
+- Commit: 9ffc25a (etiqueta v1.0.0)
 - Etiqueta: v1.0.0
 - URL Frontend: https://task-manager-frontend-anarascon.onrender.com
 - URL Backend: https://task-api-express-anarascon.onrender.com
