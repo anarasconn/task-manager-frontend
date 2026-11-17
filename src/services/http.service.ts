@@ -9,6 +9,12 @@ interface HttpErrorOptions {
   details?: unknown;
 }
 
+type UnauthorizedHandler = () => void;
+
+let unauthorizedHandler:
+  | UnauthorizedHandler
+  | undefined;
+
 export class HttpError extends Error {
   readonly status: number;
   readonly code: string;
@@ -23,6 +29,17 @@ export class HttpError extends Error {
     this.requestId = options.requestId;
     this.details = options.details;
   }
+}
+
+export function setUnauthorizedHandler(
+  handler: UnauthorizedHandler,
+): () => void {
+  unauthorizedHandler = handler;
+  return () => {
+    if (unauthorizedHandler === handler) {
+      unauthorizedHandler = undefined;
+    }
+  };
 }
 
 function isRecord(
@@ -70,12 +87,20 @@ async function readPayload(
 export async function httpRequest<T>(
   path: string,
   options: RequestInit = {},
+  accessToken?: string,
 ): Promise<T> {
   const headers = new Headers(options.headers);
   headers.set('Accept', 'application/json');
 
   if (options.body && !headers.has('Content-Type')) {
     headers.set('Content-Type', 'application/json');
+  }
+
+  if (accessToken) {
+    headers.set(
+      'Authorization',
+      `Bearer ${accessToken}`,
+    );
   }
 
   try {
@@ -94,6 +119,10 @@ export async function httpRequest<T>(
     const payload = await readPayload(response);
 
     if (!response.ok) {
+      if (response.status === 401 && accessToken) {
+        unauthorizedHandler?.();
+      }
+
       if (isApiErrorBody(payload)) {
         throw new HttpError({
           status: response.status,
@@ -107,8 +136,7 @@ export async function httpRequest<T>(
       throw new HttpError({
         status: response.status,
         code: 'HTTP_ERROR',
-        message:
-          'La API respondió con un error.',
+        message: 'La API respondió con un error.',
       });
     }
 
@@ -124,8 +152,7 @@ export async function httpRequest<T>(
     throw new HttpError({
       status: 0,
       code: 'NETWORK_ERROR',
-      message:
-        'No fue posible conectar con la API.',
+      message: 'No fue posible conectar con la API.',
     });
   }
 }

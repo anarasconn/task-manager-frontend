@@ -2,18 +2,23 @@
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router';
 import App from './App';
+import { AuthProvider } from './providers/AuthProvider';
 import './styles/index.css';
 
 const root = document.getElementById('root');
 
 if (!root) {
-  throw new Error('No se encontró el elemento #root.');
+  throw new Error(
+    'No se encontró el elemento #root.',
+  );
 }
 
 createRoot(root).render(
   <StrictMode>
     <BrowserRouter>
-      <App />
+      <AuthProvider>
+        <App />
+      </AuthProvider>
     </BrowserRouter>
   </StrictMode>,
 );
