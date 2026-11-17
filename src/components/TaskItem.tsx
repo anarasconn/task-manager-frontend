@@ -10,6 +10,7 @@ import {
 
 interface TaskItemProps {
   task: Task;
+  canDelete: boolean;
   onToggleStatus: (task: Task) => Promise<boolean>;
   onEditTask: (
     task: Task,
@@ -20,6 +21,7 @@ interface TaskItemProps {
 
 export function TaskItem({
   task,
+  canDelete,
   onToggleStatus,
   onEditTask,
   onDeleteTask,
@@ -29,7 +31,6 @@ export function TaskItem({
     useState(task.title);
   const [error, setError] = useState('');
   const [isBusy, setIsBusy] = useState(false);
-
   const statusLabel =
     task.status === 'completed'
       ? 'Completada'
@@ -174,14 +175,16 @@ export function TaskItem({
         >
           Editar
         </button>
-        <button
-          type="button"
-          className="button-danger"
-          disabled={isBusy || isEditing}
-          onClick={() => void handleDelete()}
-        >
-          Eliminar
-        </button>
+        {canDelete && (
+          <button
+            type="button"
+            className="button-danger"
+            disabled={isBusy || isEditing}
+            onClick={() => void handleDelete()}
+          >
+            Eliminar
+          </button>
+        )}
       </div>
     </article>
   );

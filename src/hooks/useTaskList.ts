@@ -33,6 +33,7 @@ const EMPTY_META: PageMeta = {
 
 export function useTaskList(
   query: TaskListQuery,
+  accessToken: string | null,
 ) {
   const {
     page,
@@ -46,23 +47,30 @@ export function useTaskList(
   const [state, setState] =
     useState<TaskListState>({
       tasks: [],
-      meta: {
-        ...EMPTY_META,
-        page,
-        limit,
-      },
+      meta: { ...EMPTY_META, page, limit },
       status: 'idle',
       errorMessage: '',
     });
 
-  const [reloadKey, setReloadKey] =
-    useState(0);
+  const [reloadKey, setReloadKey] = useState(0);
 
   const reload = useCallback(() => {
     setReloadKey((current) => current + 1);
   }, []);
 
   useEffect(() => {
+    if (!accessToken) {
+      // oxlint-disable-next-line react/set-state-in-effect
+      setState({
+        tasks: [],
+        meta: { ...EMPTY_META, page, limit },
+        status: 'idle',
+        errorMessage: '',
+      });
+      return;
+    }
+
+    const currentToken = accessToken;
     const controller = new AbortController();
 
     async function load(): Promise<void> {
@@ -73,14 +81,18 @@ export function useTaskList(
       }));
 
       try {
-        const response = await listTasks({
-          page,
-          limit,
-          search,
-          status: statusFilter,
-          sortBy,
-          order,
-        }, controller.signal);
+        const response = await listTasks(
+          {
+            page,
+            limit,
+            search,
+            status: statusFilter,
+            sortBy,
+            order,
+          },
+          currentToken,
+          controller.signal,
+        );
 
         setState({
           tasks: response.data,
@@ -98,24 +110,18 @@ export function useTaskList(
 
         setState({
           tasks: [],
-          meta: {
-            ...EMPTY_META,
-            page,
-            limit,
-          },
+          meta: { ...EMPTY_META, page, limit },
           status: 'error',
-          errorMessage:
-            getHttpErrorMessage(error),
+          errorMessage: getHttpErrorMessage(error),
         });
       }
     }
 
     void load();
 
-    return () => {
-      controller.abort();
-    };
+    return () => controller.abort();
   }, [
+    accessToken,
     page,
     limit,
     search,
@@ -125,8 +131,5 @@ export function useTaskList(
     reloadKey,
   ]);
 
-  return {
-    ...state,
-    reload,
-  };
+  return { ...state, reload };
 }
