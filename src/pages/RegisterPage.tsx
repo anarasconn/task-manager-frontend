@@ -69,6 +69,7 @@ export function RegisterPage() {
         name: normalizedName,
         email: email.trim(),
         password,
+        confirmPassword: confirmation,
       });
 
       navigate('/login', {
